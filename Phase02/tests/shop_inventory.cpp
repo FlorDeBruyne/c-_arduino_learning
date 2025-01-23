@@ -6,17 +6,17 @@ using namespace std;
 
 
 class Product{
+public:
     string name;
     double id;
     float price;
     double quantity;
 
-public:
     Product(string name, double id, float price): name(name), id(id), price(price), quantity(1) {}
     Product(string name, double id, float price, double quantity):  name(name), id(id), price(price), quantity(quantity) {}
 
     void removeProduct(double  amount){
-        quantity = quantity - amount;
+        quantity -= amount;
     };
 
     void changePrice(float newPrice){
@@ -31,7 +31,7 @@ public:
         quantity = newQuantity;
     };
 
-    void print(){
+    void print() const {
         cout << "Product name: " << name << endl;
         cout << "price: " << price << endl;
         cout << "Amount of products: " << quantity << endl;
@@ -50,55 +50,81 @@ public:
         products.push_back(product);
     };
 
-    void addProduct(){
-        string productName;
-        double productId;
-        float productPrice;
-        double productAmount;
-
-        cout << "Give me the Product details: " << endl;
-        cout << "What is the Product name: ";
-        cin >> productName;
-        cout << "What is the Product id: ";
-        cin >> productId;
-        cout << "What is the Product price: ";
-        cin >> productPrice;
-        cout << "How many Products: ";
-        cin >> productAmount;
-        Product product(productName, productId, productPrice, productAmount);
-        products.push_back(product);
+    Product* findProductById(double productId){
+        for (auto& product : products){
+            if (product.id == productId){
+                return &product;
+            };
+        };
+        return nullptr;
     };
 
-    void removeProduct(Product product){
-        products.pop_back();
+    bool removeProduct(double productId){
+        for (auto it = products.begin(); it != products.end(); ++it){
+            if (it->id == productId){
+                products.erase(it);
+                return true;
+            }
+        }
+        return false;
     };
     
     void print(){
+        cout << "Inventory of shop: " << shopName << endl;
+        cout << "----------------------------" << endl;
         cout << "This is the product inventory: " << endl;
-        for (Product product : products){
+        for (auto& product : products){
             product.print();
-            cout << endl;
-        };
+            cout << "----------------------------" << endl;
+        }
     };
 
-    
 
 };
 
 int main(){
     string shopName;
-
-    cout << "Give me the shop name: ";
+    cout << "Enter the shop name: ";
     cin >> shopName;
 
     Inventory inventory(shopName);
 
-    Product apple("Jona Gold", 001, 2.5);
+    Product apple("Jona Gold", 1, 2.5);
     apple.changeQuantity(100);
-
     inventory.addProduct(apple);
-    inventory.addProduct();
+
+    string productName;
+    double productId;
+    float productPrice;
+    double productAmount;
+
+    cout << "Enter product details:" << endl;
+    cout << "Name: ";
+    cin >> productName;
+    cout << "ID: ";
+    cin >> productId;
+    cout << "Price: ";
+    cin >> productPrice;
+    cout << "Quantity: ";
+    cin >> productAmount;
+
+    Product newProduct(productName, productId, productPrice, productAmount);
+    inventory.addProduct(newProduct);
+
+    double searchId;
+    cout << "Enter product ID to search: ";
+    cin >> searchId;
+
+    Product* found = inventory.findProductById(searchId);
+    if (found) {
+        cout << "Product found:" << endl;
+        found->print();
+    } else {
+        cout << "No product with this ID." << endl;
+    }
+
     inventory.print();
+    return 0;
 
     return 0;
 }
