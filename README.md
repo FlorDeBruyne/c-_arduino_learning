@@ -72,7 +72,7 @@
 
 ---
 
-## **Phase 4: Advanced C++ Without Arduino (Optional)**
+## **Phase 4: Advanced C++ Without Arduino**
 ### **Objective**: Master advanced C++ topics for standalone software.
 
 1. **Course**:
